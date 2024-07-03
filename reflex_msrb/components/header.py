@@ -4,6 +4,9 @@ import reflex as rx
 
 
 class HeaderState(State):
+    language_title: list[str] = [
+        'English (영어)', '한국어 (Korea)'
+    ]
 
     def change_language(self):
         self.language += 1
@@ -41,21 +44,26 @@ def header() -> rx.Component:
 
     return rx.flex(
         rx.hstack(
-            rx.icon_button(
-                'align-justify',
-                on_click=rx.redirect('/home'),
-            ),
             rx.hstack(
+                rx.icon_button(
+                    'align-justify',
+                    on_click=rx.redirect('/home'),
+                ),
                 rx.icon_button(
                     'align-justify',
                     **_header_icon_button_props,
                     on_click=rx.redirect('/about-me'),
                 ),
-                rx.icon_button(
-                    'languages',
-                    **_header_icon_button_props,
-                    on_click=HeaderState.change_language
-                )
+            ),
+            rx.button(
+                rx.icon(
+                    'languages'
+                ),
+                rx.spacer(),
+                HeaderState.language_title[HeaderState.language],
+                width='120px',
+                **_header_icon_button_props,
+                on_click=HeaderState.change_language
             ),
             **_header_group_props,
         ),
