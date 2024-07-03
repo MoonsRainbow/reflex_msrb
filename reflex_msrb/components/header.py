@@ -4,7 +4,11 @@ import reflex as rx
 
 
 class HeaderState(State):
-    pass
+
+    def change_language(self):
+        self.language += 1
+        if len(self.language_list) <= self.language:
+            self.language = 0
 
 
 def header() -> rx.Component:
@@ -39,12 +43,19 @@ def header() -> rx.Component:
         rx.hstack(
             rx.icon_button(
                 'align-justify',
-                on_click=None,
+                on_click=rx.redirect('/home'),
             ),
-            rx.icon_button(
-                'align-justify',
-                **_header_icon_button_props,
-                on_click=None,
+            rx.hstack(
+                rx.icon_button(
+                    'align-justify',
+                    **_header_icon_button_props,
+                    on_click=rx.redirect('/about-me'),
+                ),
+                rx.icon_button(
+                    'languages',
+                    **_header_icon_button_props,
+                    on_click=HeaderState.change_language
+                )
             ),
             **_header_group_props,
         ),
