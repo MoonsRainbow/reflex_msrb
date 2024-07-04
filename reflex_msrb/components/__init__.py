@@ -1,2 +1,2 @@
-from .header import header
-from .footer import footer
+from .header import header_bar
+from .footer import footer_bar

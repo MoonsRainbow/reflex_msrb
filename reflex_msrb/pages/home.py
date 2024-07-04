@@ -1,17 +1,17 @@
 from .template import wrap_template
-from reflex_msrb.states import State
+from reflex_msrb.states import BaseState
 from reflex_msrb.routes import HOME_ROUTE
 
 import reflex as rx
 
 
-class HomeState(State):
-    pass
+class HomeBaseState(BaseState):
+    page_title: list[str] = ['홈', 'Home']
 
 
 @rx.page(
     route=HOME_ROUTE,
-    title='Home | MoonsRainbow'
+    title=f"{HomeBaseState.page_title[HomeBaseState.language]} | MoonsRainbow"
 )
 @wrap_template
 def home() -> rx.Component:
