@@ -7,4 +7,8 @@ from rxconfig import config
 import reflex as rx
 
 
-app = rx.App()
+app = rx.App(
+    theme=rx.theme(
+        radius='large'
+    )
+)
