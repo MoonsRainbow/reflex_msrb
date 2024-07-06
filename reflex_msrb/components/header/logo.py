@@ -9,12 +9,8 @@ def header_logo(
             src='/msrb_logo.png',
             width='180px',
         ),
-        # width='30px',
-        height='30px',
+        height='44px',
         variant='ghost',
-        radius='none',
-        color='white',
-        size='2',
-        color_schema=None,
+        cursor='pointer',
         on_click=_on_click
     )
