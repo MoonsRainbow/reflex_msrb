@@ -1,4 +1,8 @@
 import reflex as rx
+from reflex_msrb.styles import (
+    light_mode,
+    dark_mode,
+)
 
 
 def header_icon_button(
@@ -10,7 +14,10 @@ def header_icon_button(
         width='44px',
         height='44px',
         variant='ghost',
-        color='white',
         cursor='pointer',
+        color=rx.color_mode_cond(
+            light=light_mode['icon_color'],
+            dark=dark_mode['icon_color']
+        ),
         on_click=_on_click
     )

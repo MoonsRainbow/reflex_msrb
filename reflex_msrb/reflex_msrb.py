@@ -9,6 +9,8 @@ import reflex as rx
 
 app = rx.App(
     theme=rx.theme(
-        radius='large'
+        appearance='light',
+        has_background=True,
+        radius='large',
     )
 )

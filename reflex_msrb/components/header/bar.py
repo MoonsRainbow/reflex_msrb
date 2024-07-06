@@ -1,7 +1,10 @@
 import reflex as rx
 from reflex.style import toggle_color_mode
-
 from reflex_msrb.states import BaseState
+from reflex_msrb.styles import (
+    light_mode,
+    dark_mode
+)
 from reflex_msrb.routes import (
     HOME_ROUTE,
     ABOUT_ME_ROUTE,
@@ -24,6 +27,7 @@ def header_bar() -> rx.Component:
                 ),
                 align='center',
                 justify='start',
+                spacing='4',
             ),
             rx.hstack(
                 header_icon_button(
@@ -39,12 +43,13 @@ def header_bar() -> rx.Component:
                 ),
                 align='center',
                 justify='end',
+                spacing='4',
             ),
             align='center',
             justify='between',
             width='100%',
             spacing='0',
-            padding='12px',
+            padding='24px',
         ),
         position='fixed',
         align='center',
@@ -53,10 +58,9 @@ def header_bar() -> rx.Component:
         height='68px',
         top='0px',
         left='0px',
-        # TODO light mode color choice
-        background=rx.color_mode_cond(
-            light='#444',
-            dark='#444',
-        ),
         box_shadow='rgba(0, 0, 0, 0.2) 0 4px 8px 4px',
+        background=rx.color_mode_cond(
+            light=light_mode['header_background_color'],
+            dark=dark_mode['header_background_color']
+        ),
     )
