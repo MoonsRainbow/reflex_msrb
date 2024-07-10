@@ -11,6 +11,7 @@ from reflex_msrb.routes import (
 )
 
 from .logo import header_logo
+from .menu_button import header_menu_button
 from .icon_button import header_icon_button
 
 
@@ -28,6 +29,11 @@ def header_bar() -> rx.Component:
                 align='center',
                 justify='start',
                 spacing='4',
+            ),
+            rx.hstack(
+                header_menu_button(
+                    _text=['환영합니다', 'Welcom']
+                ),
             ),
             rx.hstack(
                 header_icon_button(
