@@ -26,9 +26,6 @@ def wrap_template(_content: Callable[[], rx.Component]) -> rx.Component:
             justify='between',
             width='100%',
             height='120vh',
-            background='blue',
             spacing='0',
         ),
-        appearance='light',
-        has_background=False,
     )
