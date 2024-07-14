@@ -11,6 +11,8 @@ app = rx.App(
     theme=rx.theme(
         appearance='light',
         has_background=True,
+        accent_color='gold',
+        color_scheme='yellow',
         radius='large',
     )
 )
