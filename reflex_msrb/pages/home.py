@@ -19,6 +19,13 @@ def home() -> rx.Component:
         rx.text(
             'Home World!',
         ),
+        rx.input(
+            id='test-focus'
+        ),
+        rx.button(
+            'Change Focus',
+            on_click=rx.set_focus('test-focus'),
+        ),
         align='center',
         justify='center',
         width='100%',
