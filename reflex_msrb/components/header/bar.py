@@ -125,4 +125,5 @@ def header_bar() -> rx.Component:
         left='0px',
         background='#444',
         box_shadow='rgba(0, 0, 0, 0.2) 0 4px 8px 4px',
+        z_index=999,
     )
