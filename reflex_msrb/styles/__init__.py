@@ -1,4 +1,1 @@
-from .base import (
-    light_mode,
-    dark_mode,
-)
+from .base import pages_style

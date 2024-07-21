@@ -1,17 +1,9 @@
-light_mode = {
-    'header_background_color': '#444',
-    'footer_background_color': '#444',
-    'icon_color': 'white',
-    'content_background_color': 'orange',
-    'title_color': 'white',
-    'text_color': 'white',
-}
-
-dark_mode = {
-    'header_background_color': '#444',
-    'footer_background_color': '#444',
-    'icon_color': 'white',
-    'content_background_color': 'black',
-    'title_color': 'white',
-    'text_color': 'white',
+pages_style = {
+    'position': 'relative',
+    'top': '64px',
+    'align': 'start',
+    'justify': 'center',
+    'width': '100%',
+    'height': '100%',
+    'padding': '16px',
 }
