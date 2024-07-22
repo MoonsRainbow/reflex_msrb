@@ -1,6 +1,6 @@
 pages_style = {
     'position': 'relative',
-    'top': '64px',
+    'top': '128px',
     'align': 'start',
     'justify': 'center',
     'width': '100%',
