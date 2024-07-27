@@ -1,3 +1,5 @@
+import calendar
+from datetime import datetime
 from .template import wrap_template
 from reflex_msrb.states import BaseState
 from reflex_msrb.routes import GALLERY_ROUTE
@@ -9,6 +11,18 @@ import reflex as rx
 
 
 class Project(rx.Base):
+    attr_str_names: list[str] = [
+        'kor_title', 'eng_title',
+    ]
+
+    attr_date_names: list[str] = [
+        'start_month', 'end_month',
+    ]
+
+    attr_list_names: list[str] = [
+        'sub_tags'
+    ]
+
     kor_title: str
     eng_title: str
     start_month: str
@@ -62,18 +76,57 @@ class GalleryState(BaseState):
 
         if text != '':
             for project in self.projects:
-                if self.keyword in project.kor_title.lower() or self.keyword in project.eng_title.lower():
+                if any(self.keyword in attr_name.lower() for attr_name in project.attr_str_names):
+                    project.is_show = True
+                elif any(self.keyword in sub_tag.lower() for sub_tag in project.sub_tags):
+                    project.is_show = True
+                elif any(self.keyword in month for month in project.attr_date_names):
                     project.is_show = True
                 else:
-                    # TODO 범위 안에 있는 월이면 검색 결과에 노출 되도록 수정
-                    if self.keyword in project.start_month or self.keyword in project.end_month:
-                        project.is_show = True
-                    else:
-                        for tag in project.sub_tags:
-                            if self.keyword in tag.lower():
+                    start_year, start_month = [int(s) for s in project.start_month.split('.')]
+                    start_day = 1
+
+                    end_year, end_month = [int(s) for s in project.end_month.split('.')]
+                    end_day = calendar.monthrange(end_year, end_month)[1]
+                    if self.keyword.isdigit():
+                        # TODO 범위 안에 있는 월이면 검색 결과에 노출 되도록 수정
+                        if len(self.keyword) == 4:
+                            if start_year <= int(self.keyword) <= end_year:
                                 project.is_show = True
-                                break
-                        else:
+                            else:
+                                project.is_show = False
+                        elif len(self.keyword) == 5:
+                            # TODO month_keyword 가 내부 범위에 속해 있는 지 확인
+                            year_keyword = int(self.keyword[:-1])
+                            month_keyword = int(self.keyword[-1])
+                            # if all([start_year <= year_keyword <= end_year,
+                            #         start_month <= month_keyword <= end_month]):
+                            #     project.is_show = True
+                            # else:
+                            #     project.is_show = False
+                        elif len(self.keyword) == 6:
+                            # TODO month_keyword 가 내부 범위에 속해 있는 지 확인
+                            year_keyword = int(self.keyword[:-2])
+                            month_keyword = int(self.keyword[-2:])
+                            # if all([start_year <= year_keyword <= end_year,
+                            #         month_keyword < 13,
+                            #         start_month <= month_keyword <= end_month]):
+                            #     project.is_show = True
+                            # else:
+                            #     project.is_show = False
+                    else:
+                        try:
+                            if '-' in self.keyword:
+                                date_keyword = datetime.strptime(self.keyword, '%Y-%m-%d')
+                            else:
+                                date_keyword = datetime.strptime(self.keyword, '%Y.%m.%d')
+
+                            if datetime(start_year, start_month, start_day) <= date_keyword <= datetime(
+                                    end_year, end_month, end_day):
+                                project.is_show = True
+                            else:
+                                project.is_show = False
+                        except ValueError:
                             project.is_show = False
         else:
             for project in self.projects:
