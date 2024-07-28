@@ -99,21 +99,10 @@ class GalleryState(BaseState):
                             # TODO month_keyword 가 내부 범위에 속해 있는 지 확인
                             year_keyword = int(self.keyword[:-1])
                             month_keyword = int(self.keyword[-1])
-                            # if all([start_year <= year_keyword <= end_year,
-                            #         start_month <= month_keyword <= end_month]):
-                            #     project.is_show = True
-                            # else:
-                            #     project.is_show = False
                         elif len(self.keyword) == 6:
                             # TODO month_keyword 가 내부 범위에 속해 있는 지 확인
                             year_keyword = int(self.keyword[:-2])
                             month_keyword = int(self.keyword[-2:])
-                            # if all([start_year <= year_keyword <= end_year,
-                            #         month_keyword < 13,
-                            #         start_month <= month_keyword <= end_month]):
-                            #     project.is_show = True
-                            # else:
-                            #     project.is_show = False
                     else:
                         try:
                             if '-' in self.keyword:
