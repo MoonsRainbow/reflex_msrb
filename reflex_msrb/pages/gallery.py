@@ -103,6 +103,7 @@ class GalleryState(BaseState):
                             # TODO month_keyword 가 내부 범위에 속해 있는 지 확인
                             year_keyword = int(self.keyword[:-2])
                             month_keyword = int(self.keyword[-2:])
+
                     else:
                         try:
                             if '-' in self.keyword:
