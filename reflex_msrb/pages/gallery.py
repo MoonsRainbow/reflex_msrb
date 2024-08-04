@@ -42,6 +42,7 @@ class GalleryState(BaseState):
         ['Project Winsabis', '윈서비스 업무 자동화 프로젝트', '2019.3', '2019.12'],
         ['Project Yarding', '야딩 프로젝트', '2019.6', '2020.6'],
         ['Carbay Korea', '카베이 코리아', '2019.9', '2022.2'],
+        ['Unipass Program', '유니패스 프로그램', '2022.5', '2022.11']
         # ['PF with Bank', 'PF 대출과 재무건전성', '2022.9', '2022.10'],
         # ['Predicting the spread of forest fires', '산불의 확산 규모 예측', '2022.9', '2022.10'],
     ]
@@ -52,6 +53,7 @@ class GalleryState(BaseState):
         ['Python 3.x', 'SQL', 'Maria DB', 'UI Design', 'WinAPI'],
         ['Android', 'Java', 'SQL', 'PHP', 'Tomcat Apache', 'Mysql DB', 'Application'],
         ['Team Lead', 'Policy Design', 'UI/UX Design', 'Structure', 'Axure 9', 'Adobe XD', 'AWS', 'SQL', 'VUE2', 'JavaScript', 'Jira'],
+        ['Freelancer', 'Python 3.11', 'AWS', 'pyinstaller', 'exe', 'UI/UX Design', 'Adobe XD', 'SQL', 'WinAPI', 'Open API', 'Maria DB']
     ]
 
     projects: list[Project] = []
@@ -76,48 +78,33 @@ class GalleryState(BaseState):
 
         if text != '':
             for project in self.projects:
-                if any(self.keyword in attr_name.lower() for attr_name in project.attr_str_names):
+                start_year, start_month = [int(s) for s in project.start_month.split('.')]
+                end_year, end_month = [int(e) for e in project.end_month.split('.')]
+                start_day, end_day = 1, calendar.monthrange(end_year, end_month)[1]
+                if any(self.keyword in project.get_value(attr_name).lower() for attr_name in project.attr_str_names):
                     project.is_show = True
                 elif any(self.keyword in sub_tag.lower() for sub_tag in project.sub_tags):
                     project.is_show = True
-                elif any(self.keyword in month for month in project.attr_date_names):
+                elif any(self.keyword in project.get_value(month) for month in project.attr_date_names):
+                    project.is_show = True
+                elif self.keyword.isdigit() and len(self.keyword) == 4 and (
+                        start_year <= int(self.keyword) <= end_year
+                ):
+                    project.is_show = True
+                elif self.keyword.isdigit() and len(self.keyword) in (5, 6) and (
+                        int(f'{start_year}{str(start_month).zfill(2)}') <= int(
+                        f'{self.keyword[:4]}{self.keyword[4:].zfill(2)}'
+                        ) <= int(f'{end_year}{str(end_month).zfill(2)}')
+                ):
+                    project.is_show = True
+                elif self.keyword.isdigit() and len(self.keyword) in (7, 8) and (
+                        int(f'{start_year}{str(start_month).zfill(2)}01') <= int(
+                        f'{self.keyword[:4]}{self.keyword[4:6].zfill(2)}{self.keyword[6:].zfill(2)}'
+                        ) <= int(f'{end_year}{str(end_month).zfill(2)}{end_day}')
+                ):
                     project.is_show = True
                 else:
-                    start_year, start_month = [int(s) for s in project.start_month.split('.')]
-                    start_day = 1
-
-                    end_year, end_month = [int(s) for s in project.end_month.split('.')]
-                    end_day = calendar.monthrange(end_year, end_month)[1]
-                    if self.keyword.isdigit():
-                        # TODO 범위 안에 있는 월이면 검색 결과에 노출 되도록 수정
-                        if len(self.keyword) == 4:
-                            if start_year <= int(self.keyword) <= end_year:
-                                project.is_show = True
-                            else:
-                                project.is_show = False
-                        elif len(self.keyword) == 5:
-                            # TODO month_keyword 가 내부 범위에 속해 있는 지 확인
-                            year_keyword = int(self.keyword[:-1])
-                            month_keyword = int(self.keyword[-1])
-                        elif len(self.keyword) == 6:
-                            # TODO month_keyword 가 내부 범위에 속해 있는 지 확인
-                            year_keyword = int(self.keyword[:-2])
-                            month_keyword = int(self.keyword[-2:])
-
-                    else:
-                        try:
-                            if '-' in self.keyword:
-                                date_keyword = datetime.strptime(self.keyword, '%Y-%m-%d')
-                            else:
-                                date_keyword = datetime.strptime(self.keyword, '%Y.%m.%d')
-
-                            if datetime(start_year, start_month, start_day) <= date_keyword <= datetime(
-                                    end_year, end_month, end_day):
-                                project.is_show = True
-                            else:
-                                project.is_show = False
-                        except ValueError:
-                            project.is_show = False
+                    project.is_show = False
         else:
             for project in self.projects:
                 project.is_show = True
@@ -154,6 +141,11 @@ def gallery() -> rx.Component:
                 radius='full',
                 size='3',
                 on_change=GalleryState.searching,
+                placeholder=rx.cond(
+                    GalleryState.language,
+                    'Some keyword, title, YYYYMMDD...',
+                    '키워드, 제목, YYYYMMDD 을 입력해주세요...'
+                )
             ),
             rx.vstack(
                 rx.foreach(
@@ -161,12 +153,40 @@ def gallery() -> rx.Component:
                     lambda project, index: rx.cond(
                         project.is_show,
                         rx.card(
-                            rx.text(
-                                rx.cond(
-                                    GalleryState.language,
-                                    project.eng_title,
-                                    project.kor_title
-                                )
+                            rx.vstack(
+                                rx.vstack(
+                                    rx.hstack(
+                                        rx.text.strong(
+                                            rx.cond(
+                                                GalleryState.language,
+                                                project.eng_title,
+                                                project.kor_title
+                                            ),
+                                            font_size=20
+                                        ),
+                                    ),
+                                    rx.text(
+                                        '[',
+                                        project.start_month,
+                                        ' ~ ',
+                                        project.end_month,
+                                        ']',
+                                        font_size=12,
+                                    ),
+                                    width='100%',
+                                    spacing='1'
+                                ),
+                                rx.flex(
+                                    rx.foreach(
+                                        project.sub_tags,
+                                        lambda tag: rx.badge(
+                                            f'#{tag}',
+                                        )
+                                    ),
+                                    spacing='3',
+                                ),
+                                width='100%',
+                                spacing='4',
                             ),
                             width='100%',
                         ),
