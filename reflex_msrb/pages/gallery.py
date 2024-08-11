@@ -47,13 +47,17 @@ class GalleryState(BaseState):
         # ['Predicting the spread of forest fires', '산불의 확산 규모 예측', '2022.9', '2022.10'],
     ]
 
-    sub_tags: list[list[list[str]]] = [
+    sub_tags: list[list[str]] = [
         ['Python 3.x', 'SQL', 'Maria DB', 'Multi-Processing', 'Selenium', 'Chrome Driver', 'RESTful API'],
         ['Python 3.x', 'SQL', 'Maria DB', 'UI Design', 'Selenium', 'Chrome Driver'],
         ['Python 3.x', 'SQL', 'Maria DB', 'UI Design', 'WinAPI'],
         ['Android', 'Java', 'SQL', 'PHP', 'Tomcat Apache', 'Mysql DB', 'Application'],
         ['Team Lead', 'Policy Design', 'UI/UX Design', 'Structure', 'Axure 9', 'Adobe XD', 'AWS', 'SQL', 'VUE2', 'JavaScript', 'Jira'],
         ['Freelancer', 'Python 3.11', 'AWS', 'pyinstaller', 'exe', 'UI/UX Design', 'Adobe XD', 'SQL', 'WinAPI', 'Open API', 'Maria DB']
+    ]
+
+    describe = list[list[str]] = [
+
     ]
 
     projects: list[Project] = []
@@ -143,7 +147,7 @@ def gallery() -> rx.Component:
                 on_change=GalleryState.searching,
                 placeholder=rx.cond(
                     GalleryState.language,
-                    'Please enter the name of the tech stack.',
+                    'Please enter the name of the skill stack.',
                     '기술 스택 이름을 입력해주세요.'
                 )
             ),
