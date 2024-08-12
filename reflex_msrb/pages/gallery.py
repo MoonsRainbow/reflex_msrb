@@ -56,8 +56,10 @@ class GalleryState(BaseState):
         ['Freelancer', 'Python 3.11', 'AWS', 'pyinstaller', 'exe', 'UI/UX Design', 'Adobe XD', 'SQL', 'WinAPI', 'Open API', 'Maria DB']
     ]
 
-    describe = list[list[str]] = [
-
+    describe: list[list[str]] = [
+        ['ENG', 'KOR'],
+        [],
+        []
     ]
 
     projects: list[Project] = []
