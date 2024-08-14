@@ -12,7 +12,7 @@ import reflex as rx
 
 class Project(rx.Base):
     attr_str_names: list[str] = [
-        'kor_title', 'eng_title',
+        'kor_title', 'eng_title', 'kor_describe', 'eng_describe'
     ]
 
     attr_date_names: list[str] = [
@@ -28,6 +28,8 @@ class Project(rx.Base):
     start_month: str
     end_month: str
     sub_tags: list[str]
+    kor_describe: str
+    eng_describe: str
     is_show: bool = True
 
 
@@ -58,8 +60,11 @@ class GalleryState(BaseState):
 
     describe: list[list[str]] = [
         ['ENG', 'KOR'],
-        [],
-        []
+        ['ENG', 'KOR'],
+        ['ENG', 'KOR'],
+        ['ENG', 'KOR'],
+        ['ENG', 'KOR'],
+        ['ENG', 'KOR'],
     ]
 
     projects: list[Project] = []
@@ -68,14 +73,17 @@ class GalleryState(BaseState):
         self.keyword = ''
 
         if not self.projects:
-            for c, s in zip(self.contents, self.sub_tags):
+            for c, s, d in zip(self.contents, self.sub_tags, self.describe):
                 self.projects.append(
                     Project(
-                        kor_title=c[1],
                         eng_title=c[0],
+                        kor_title=c[1],
                         start_month=c[2],
                         end_month=c[3],
                         sub_tags=s,
+                        eng_describe=d[0],
+                        kor_describe=d[1],
+
                     )
                 )
 
