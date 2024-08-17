@@ -83,7 +83,6 @@ class GalleryState(BaseState):
                         sub_tags=s,
                         eng_describe=d[0],
                         kor_describe=d[1],
-
                     )
                 )
 
