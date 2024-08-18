@@ -91,31 +91,10 @@ class GalleryState(BaseState):
 
         if text != '':
             for project in self.projects:
-                # start_year, start_month = [int(s) for s in project.start_month.split('.')]
-                # end_year, end_month = [int(e) for e in project.end_month.split('.')]
-                # start_day, end_day = 1, calendar.monthrange(end_year, end_month)[1]
                 if any(self.keyword in sub_tag.lower() for sub_tag in project.sub_tags):
                     project.is_show = True
-                # elif any(self.keyword in project.get_value(attr_name).lower() for attr_name in project.attr_str_names):
-                #     project.is_show = True
-                # elif any(self.keyword in project.get_value(month) for month in project.attr_date_names):
-                #     project.is_show = True
-                # elif self.keyword.isdigit() and len(self.keyword) == 4 and (
-                #         start_year <= int(self.keyword) <= end_year
-                # ):
-                #     project.is_show = True
-                # elif self.keyword.isdigit() and len(self.keyword) in (5, 6) and (
-                #         int(f'{start_year}{str(start_month).zfill(2)}') <= int(
-                #         f'{self.keyword[:4]}{self.keyword[4:].zfill(2)}'
-                #         ) <= int(f'{end_year}{str(end_month).zfill(2)}')
-                # ):
-                #     project.is_show = True
-                # elif self.keyword.isdigit() and len(self.keyword) in (7, 8) and (
-                #         int(f'{start_year}{str(start_month).zfill(2)}01') <= int(
-                #         f'{self.keyword[:4]}{self.keyword[4:6].zfill(2)}{self.keyword[6:].zfill(2)}'
-                #         ) <= int(f'{end_year}{str(end_month).zfill(2)}{end_day}')
-                # ):
-                #     project.is_show = True
+                elif any(self.keyword in describe for describe in [project.kor_describe, project.eng_describe]):
+                    project.is_show = True
                 else:
                     project.is_show = False
         else:
