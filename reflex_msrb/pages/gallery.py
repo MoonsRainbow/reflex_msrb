@@ -23,6 +23,7 @@ class Project(rx.Base):
         'sub_tags'
     ]
 
+    thumbnail: str
     kor_title: str
     eng_title: str
     start_month: str
@@ -37,6 +38,15 @@ class GalleryState(BaseState):
     page_title: list[str] = ['갤러리', 'Gallery']
 
     keyword: str = ''
+
+    thumbnails: list[str] = [
+        '/logo.png',
+        '/logo.png',
+        '/logo.png',
+        '/logo.png',
+        '/logo.png',
+        '/logo.png',
+    ]
 
     contents: list[list[str]] = [
         ['Project Saturn', '토성 프로젝트', '2019.1', '2022.2'],
@@ -73,9 +83,10 @@ class GalleryState(BaseState):
         self.keyword = ''
 
         if not self.projects:
-            for c, s, d in zip(self.contents, self.sub_tags, self.describe):
+            for t, c, s, d in zip(self.thumbnails, self.contents, self.sub_tags, self.describe):
                 self.projects.append(
                     Project(
+                        thumbnail=t,
                         eng_title=c[0],
                         kor_title=c[1],
                         start_month=c[2],
@@ -145,40 +156,49 @@ def gallery() -> rx.Component:
                     lambda project, index: rx.cond(
                         project.is_show,
                         rx.card(
-                            rx.vstack(
-                                rx.vstack(
-                                    rx.hstack(
-                                        rx.text.strong(
-                                            rx.cond(
-                                                GalleryState.language,
-                                                project.eng_title,
-                                                project.kor_title
-                                            ),
-                                            font_size=20
-                                        ),
-                                    ),
-                                    rx.text(
-                                        '[',
-                                        project.start_month,
-                                        ' ~ ',
-                                        project.end_month,
-                                        ']',
-                                        font_size=12,
-                                    ),
-                                    width='100%',
-                                    spacing='1'
-                                ),
+                            rx.hstack(
                                 rx.flex(
-                                    rx.foreach(
-                                        project.sub_tags,
-                                        lambda tag: rx.badge(
-                                            f'#{tag}',
-                                        )
+                                    rx.image(
+                                        project.thumbnail,
                                     ),
-                                    spacing='3',
+                                    width='25%',
                                 ),
-                                width='100%',
-                                spacing='4',
+                                rx.vstack(
+                                    rx.vstack(
+                                        rx.hstack(
+                                            rx.text.strong(
+                                                rx.cond(
+                                                    GalleryState.language,
+                                                    project.eng_title,
+                                                    project.kor_title
+                                                ),
+                                                font_size=20
+                                            ),
+                                        ),
+                                        rx.text(
+                                            '[',
+                                            project.start_month,
+                                            ' ~ ',
+                                            project.end_month,
+                                            ']',
+                                            font_size=12,
+                                        ),
+                                        width='100%',
+                                        spacing='1'
+                                    ),
+                                    rx.flex(
+                                        rx.foreach(
+                                            project.sub_tags,
+                                            lambda tag: rx.badge(
+                                                f'#{tag}',
+                                            )
+                                        ),
+                                        spacing='3',
+                                        wrap='wrap',
+                                    ),
+                                    width='75%',
+                                    spacing='4',
+                                ),
                             ),
                             width='100%',
                         ),
