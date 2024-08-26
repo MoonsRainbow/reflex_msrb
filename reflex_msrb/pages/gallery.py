@@ -40,12 +40,12 @@ class GalleryState(BaseState):
     keyword: str = ''
 
     thumbnails: list[str] = [
-        '/logo.png',
-        '/logo.png',
-        '/logo.png',
-        '/logo.png',
-        '/logo.png',
-        '/logo.png',
+        '/Frame 2.png',
+        '/Frame 2.png',
+        '/Frame 2.png',
+        '/Frame 2.png',
+        '/Frame 2.png',
+        '/Frame 2.png',
     ]
 
     contents: list[list[str]] = [
@@ -165,15 +165,13 @@ def gallery() -> rx.Component:
                                 ),
                                 rx.vstack(
                                     rx.vstack(
-                                        rx.hstack(
-                                            rx.text.strong(
-                                                rx.cond(
-                                                    GalleryState.language,
-                                                    project.eng_title,
-                                                    project.kor_title
-                                                ),
-                                                font_size=20
+                                        rx.text.strong(
+                                            rx.cond(
+                                                GalleryState.language,
+                                                project.eng_title,
+                                                project.kor_title
                                             ),
+                                            font_size=20
                                         ),
                                         rx.text(
                                             '[',
@@ -195,6 +193,13 @@ def gallery() -> rx.Component:
                                         ),
                                         spacing='3',
                                         wrap='wrap',
+                                    ),
+                                    rx.text(
+                                        rx.cond(
+                                            GalleryState.language,
+                                            project.eng_describe,
+                                            project.kor_describe,
+                                        )
                                     ),
                                     width='75%',
                                     spacing='4',
